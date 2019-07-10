@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        table tr td {
+            width: 100px;
+            text-align: center;
+            border: 1px solid #fff;
+        }
+        
+        td {
+            width: 100px;
+            text-align: center;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <table>
+            <tr>
+                <td>全选：<input type="checkbox" v-model='selectAll'></td>
+                <td>名称</td>
+                <td>单价</td>
+                <td>数量</td>
+                <td>总价</td>
+                <td>操作</td>
+            </tr>
+            <tr v-for='(item,index) in list'>
+                <td><input type="checkbox" v-model='item.ischecked'></td>
+                <td>{{item.gname}}</td>
+                <td>{{item.onePrice}}</td>
+                <td><button @click='change(index)'>+</button> {{item.number}}
+                    <button @click='chan(index)'>-</button></td>
+                <td>
+                    {{item.money}}
+                </td>
+                <td><a href="javascript:;" @click='del'>删除</a></td>
+            </tr>
+            <tr>
+                <td>合计：{{allmoney}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        computed: {
+            allmoney() {
+                var sum = 0;
+                this.list.map(item => {
+                    if (item.ischecked) {
+                        sum += item.onePrice * item.number
+                    }
+                })
+                return sum
+            }
+        },
+        methods: {
+            change(n) {
+                this.list[n].number++;
+                this.list[n].money = this.list[n].onePrice * this.list[n].number;
+            },
+            chan(n) {
+                this.list[n].number--;
+                if (this.list[n].number <= 0) {
+                    this.list[n].number = 0;
+                }
+                this.list[n].money = this.list[n].onePrice * this.list[n].number;
+            },
+            del(n) {
+                this.list.splice(n, 1)
+            }
+        },
+        data: {
+            selectAll: false,
+            list: [{
+                gname: '诸葛亮',
+                onePrice: 18888,
+                number: 0,
+                money: '0',
+
+            }, {
+                gname: '妲己',
+                onePrice: 28888,
+                number: 0,
+                money: '0',
+
+            }, {
+                gname: '程咬金',
+                onePrice: 38888,
+                number: 0,
+                money: '0',
+
+            }, {
+                gname: '鲁班',
+                onePrice: 48888,
+                number: 0,
+                money: '0',
+
+            }]
+        }
+    })
+</script>
+
+</html>
